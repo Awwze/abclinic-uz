@@ -1,12 +1,18 @@
 import logging
+import os
 import time
+from dotenv import load_dotenv
 import asyncio
 from telegram import Update, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler
 
+load_dotenv()
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 LANGUAGE, MENU, BOOK_APPOINTMENT, GET_NAME, GET_DATE_TIME, GET_PROBLEM, GET_PREFERRED_CONTACT, GET_PHONE, VACANCIES, STAFF, ABOUT_US, CONTACTS, FEEDBACK = range(13)
+
+API_KEY = os.getenv('API_KEY')
 
 user_data = {}
 
@@ -271,7 +277,7 @@ async def command_feedback(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     return await menu_selection(update, context)
 
 def run_bot() -> None:
-    application = Application.builder().token("7438351218:AAH9XH9134lQobx6T0d4P5vGMhnNY24QrxU").build()
+    application = Application.builder().token(API_KEY).build()
 
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
